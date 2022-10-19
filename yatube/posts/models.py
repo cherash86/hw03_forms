@@ -38,11 +38,11 @@ class Post(models.Model):
         null=True
     )
 
-    def __str__(self):
-        return self.text
-
 # исправил и улучшим замечание с 3 спринта
     class Meta:
         ordering = ['-pub_date']
         verbose_name = 'Публикация'
         verbose_name_plural = 'Публикации'
+
+    def __str__(self):
+        return self.text
