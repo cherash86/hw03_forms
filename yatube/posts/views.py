@@ -10,31 +10,33 @@ NUM = 10
 
 
 def index(request):
-    post_list = Post.objects.all()
-    context = get_page_context(post_list, request)
+    post_list = Post.objects.select_related('group')
+    page_obj = get_page_context(request, post_list, NUM)
+    context = {
+        'page_obj': page_obj,
+    }
     return render(request, 'posts/index.html', context)
 
 
 def group_posts(request, slug):
     group = get_object_or_404(Group, slug=slug)
-    posts = group.posts.all()[:NUM]
+    post_list = group.posts.all()
+    page_obj = get_page_context(request, post_list, NUM)
     context = {
         'group': group,
+        'page_obj': page_obj,
     }
-    context.update(get_page_context(posts, request))
     return render(request, 'posts/group_list.html', context)
 
 
 def profile(request, username):
     author = get_object_or_404(User, username=username)
-    authors_posts = Post.objects.filter(author=author)
-    number_of_posts = authors_posts.count()
+    post_list = author.posts.all()
+    page_obj = get_page_context(request, post_list, NUM)
     context = {
         'author': author,
-        'authors_posts': authors_posts,
-        'number_of_posts': number_of_posts,
+        'page_obj': page_obj,
     }
-    context.update(get_page_context(authors_posts, request))
     return render(request, 'posts/profile.html', context)
 
 

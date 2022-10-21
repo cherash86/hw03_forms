@@ -1,12 +1,8 @@
 from django.core.paginator import Paginator
 
 
-def get_page_context(queryset, request):
-    paginator = Paginator(queryset, 10)
+def get_page_context(request, post_list, per_page):
+    paginator = Paginator(post_list, per_page)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
-    return {
-        'paginator': paginator,
-        'page_number': page_number,
-        'page_obj': page_obj,
-    }
+    return page_obj
